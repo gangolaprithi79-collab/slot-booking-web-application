@@ -1,0 +1,381 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="mb-2">Admin Dashboard</h2>
+
+<p class="text-muted">
+    Manage services, create slots and view bookings.
+</p>
+
+
+<!-- ===================================================== -->
+<!-- STATISTICS -->
+<!-- ===================================================== -->
+
+<div class="row mt-4">
+
+    <div class="col-md-3 mb-3">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <h2>{{ users_count }}</h2>
+                <p class="mb-0">Registered Users</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-3 mb-3">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <h2>{{ services_count }}</h2>
+                <p class="mb-0">Services</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-3 mb-3">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <h2>{{ slots_count }}</h2>
+                <p class="mb-0">Slots</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-3 mb-3">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <h2>{{ bookings_count }}</h2>
+                <p class="mb-0">Active Bookings</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- ===================================================== -->
+<!-- ADD SERVICE -->
+<!-- ===================================================== -->
+
+<div class="card shadow-sm mt-4">
+
+    <div class="card-body">
+
+        <h4 class="mb-3">
+            Add New Service
+        </h4>
+
+        <form
+            method="POST"
+            action="{{ url_for('admin.add_service') }}"
+        >
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Service Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="name"
+                        class="form-control"
+                        placeholder="Example: Python Consultation"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label">
+                        Duration (minutes)
+                    </label>
+
+                    <input
+                        type="number"
+                        name="duration"
+                        class="form-control"
+                        min="1"
+                        value="30"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label">
+                        Description
+                    </label>
+
+                    <input
+                        type="text"
+                        name="description"
+                        class="form-control"
+                        placeholder="Service description"
+                    >
+
+                </div>
+
+
+                <div class="col-md-2 mb-3 d-flex align-items-end">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary w-100"
+                    >
+                        Add Service
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- ===================================================== -->
+<!-- CREATE SLOT -->
+<!-- ===================================================== -->
+
+<div class="card shadow-sm mt-4">
+
+    <div class="card-body">
+
+        <h4 class="mb-3">
+            Create New Slot
+        </h4>
+
+        <form
+            method="POST"
+            action="{{ url_for('admin.add_slot') }}"
+        >
+
+            <div class="row">
+
+                <!-- SERVICE -->
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label">
+                        Service
+                    </label>
+
+                    <select
+                        name="service_id"
+                        class="form-select"
+                        required
+                    >
+
+                        <option value="">
+                            Select Service
+                        </option>
+
+                        {% for service in services %}
+
+                            <option
+                                value="{{ service.id }}"
+                            >
+                                {{ service.name }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- DATE -->
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label">
+                        Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="slot_date"
+                        id="adminDate"
+                        class="form-control"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- START TIME -->
+
+                <div class="col-md-2 mb-3">
+
+                    <label class="form-label">
+                        Start Time
+                    </label>
+
+                    <input
+                        type="time"
+                        name="start_time"
+                        class="form-control"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- END TIME -->
+
+                <div class="col-md-2 mb-3">
+
+                    <label class="form-label">
+                        End Time
+                    </label>
+
+                    <input
+                        type="time"
+                        name="end_time"
+                        class="form-control"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- BUTTON -->
+
+                <div class="col-md-2 mb-3 d-flex align-items-end">
+
+                    <button
+                        type="submit"
+                        class="btn btn-success w-100"
+                    >
+                        Create Slot
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- ===================================================== -->
+<!-- RECENT BOOKINGS -->
+<!-- ===================================================== -->
+
+<div class="card shadow-sm mt-4 mb-5">
+
+    <div class="card-body">
+
+        <h4 class="mb-3">
+            Recent Bookings
+        </h4>
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover">
+
+                <thead class="table-dark">
+
+                    <tr>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Service</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for booking in recent_bookings %}
+
+                    <tr>
+
+                        <td>
+                            {{ booking.user.name }}
+                        </td>
+
+                        <td>
+                            {{ booking.user.email }}
+                        </td>
+
+                        <td>
+                            {{ booking.slot.service.name }}
+                        </td>
+
+                        <td>
+                            {{ booking.slot.slot_date }}
+                        </td>
+
+                        <td>
+                            {{ booking.slot.start_time.strftime('%I:%M %p') }}
+                            -
+                            {{ booking.slot.end_time.strftime('%I:%M %p') }}
+                        </td>
+
+                        <td>
+
+                            {% if booking.status == "Booked" %}
+
+                                <span class="badge bg-success">
+                                    Booked
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-danger">
+                                    Cancelled
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="text-center text-muted"
+                        >
+                            No bookings available.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

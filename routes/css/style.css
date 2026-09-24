@@ -1,0 +1,37 @@
+body {
+    background-color: #f5f7fb;
+    font-family: Arial, sans-serif;
+}
+
+.navbar {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.card {
+    border: none;
+    border-radius: 12px;
+}
+
+.btn {
+    border-radius: 7px;
+}
+
+.form-control,
+.form-select {
+    border-radius: 7px;
+}
+
+.table {
+    background-color: white;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-weight: 600;
+}
+
+.badge {
+    padding: 8px 12px;
+}

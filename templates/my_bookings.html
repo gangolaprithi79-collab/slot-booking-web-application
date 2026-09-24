@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">
+    My Bookings
+</h2>
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover">
+
+                <thead class="table-primary">
+
+                    <tr>
+
+                        <th>Service</th>
+
+                        <th>Date</th>
+
+                        <th>Time</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for booking in bookings %}
+
+                    <tr>
+
+                        <td>
+                            {{ booking.slot.service.name }}
+                        </td>
+
+                        <td>
+
+                            {{ booking.slot.slot_date.strftime('%d-%m-%Y') }}
+
+                        </td>
+
+                        <td>
+
+                            {{ booking.slot.start_time.strftime('%I:%M %p') }}
+
+                            -
+
+                            {{ booking.slot.end_time.strftime('%I:%M %p') }}
+
+                        </td>
+
+                        <td>
+
+                            {% if booking.status == "Booked" %}
+
+                                <span class="badge bg-success">
+                                    Booked
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-danger">
+                                    Cancelled
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {% if booking.status == "Booked" %}
+
+                                <form
+                                    method="POST"
+                                    action="{{ url_for('booking.cancel_booking', booking_id=booking.id) }}"
+                                >
+
+                                    <button
+                                        class="btn btn-danger btn-sm"
+                                        onclick="return confirmCancel();"
+                                    >
+                                        Cancel
+                                    </button>
+
+                                </form>
+
+                            {% else %}
+
+                                <span class="text-muted">
+                                    No action
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="text-center"
+                        >
+
+                            No bookings found.
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
